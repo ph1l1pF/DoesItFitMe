@@ -1,7 +1,7 @@
-import 'package:does_it_fit_me/models/try_on_session.dart';
-import 'package:does_it_fit_me/screens/user_photo_screen.dart';
+import 'package:does_it_fit_me/navigation/try_on_flow.dart';
 import 'package:does_it_fit_me/theme/app_theme.dart';
 import 'package:does_it_fit_me/widgets/common_widgets.dart';
+import 'package:does_it_fit_me/widgets/legal_widgets.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -49,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Virtuell anprobieren\nin 30 Sekunden',
+                'Try it on virtually\nin 30 seconds',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -58,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Lade dein Foto und ein Kleidungsstück hoch – unsere KI zeigt dir, wie es an dir aussieht.',
+                'Upload your photo and a clothing item — we\'ll show you how it looks on you.',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppColors.textSecondary,
@@ -67,18 +67,12 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const Spacer(flex: 3),
               PrimaryButton(
-                label: 'Loslegen',
+                label: 'Get started',
                 icon: Icons.arrow_forward,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => UserPhotoScreen(
-                        session: TryOnSession(),
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () => startTryOnFlow(context),
               ),
+              const SizedBox(height: 16),
+              const LegalFooterLinks(),
               const SizedBox(height: 24),
             ],
           ),

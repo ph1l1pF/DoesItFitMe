@@ -7,7 +7,7 @@ void main() {
     await tester.pumpWidget(const DoesItFitMeApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Loslegen'), findsOneWidget);
-    expect(find.textContaining('Virtuell anprobieren'), findsOneWidget);
+    expect(find.text('Get started'), findsOneWidget);
+    expect(find.textContaining('Try it on virtually'), findsOneWidget);
   });
 }

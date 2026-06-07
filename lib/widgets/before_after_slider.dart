@@ -76,12 +76,12 @@ class _BeforeAfterSliderState extends State<BeforeAfterSlider> {
               Positioned(
                 left: 12,
                 top: 12,
-                child: _Badge(label: 'Vorher'),
+                child: _Badge(label: 'Before'),
               ),
               Positioned(
                 right: 12,
                 top: 12,
-                child: _Badge(label: 'Nachher'),
+                child: _Badge(label: 'After'),
               ),
               Positioned.fill(
                 child: GestureDetector(

@@ -25,11 +25,11 @@ class _GenerationScreenState extends State<GenerationScreen>
   String? _error;
 
   static const _steps = [
-    'Kleidungsstück analysieren…',
-    'Passform berechnen…',
-    'Beleuchtung anpassen…',
-    'Realistische Anprobe generieren…',
-    'Feinabstimmung…',
+    'Analyzing clothing item…',
+    'Calculating fit…',
+    'Adjusting lighting…',
+    'Generating realistic try-on…',
+    'Fine-tuning…',
   ];
 
   @override
@@ -85,7 +85,7 @@ class _GenerationScreenState extends State<GenerationScreen>
     } on GeminiException catch (e) {
       setState(() => _error = e.message);
     } catch (e) {
-      setState(() => _error = 'Anprobe fehlgeschlagen: $e');
+      setState(() => _error = 'Try-on failed: $e');
     } finally {
       progressTimer.cancel();
     }
@@ -96,7 +96,7 @@ class _GenerationScreenState extends State<GenerationScreen>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Anprobe'),
+        title: const Text('Try-on'),
       ),
       body: SafeArea(
         child: Padding(
@@ -121,7 +121,7 @@ class _GenerationScreenState extends State<GenerationScreen>
         const SizedBox(height: 24),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Zurück'),
+          child: const Text('Go back'),
         ),
       ],
     );
@@ -156,7 +156,7 @@ class _GenerationScreenState extends State<GenerationScreen>
         ),
         const SizedBox(height: 32),
         Text(
-          'KI generiert deine Anprobe',
+          'Creating your try-on',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w700,
@@ -164,7 +164,7 @@ class _GenerationScreenState extends State<GenerationScreen>
         ),
         const SizedBox(height: 8),
         Text(
-          'Das dauert etwa 5–15 Sekunden',
+          'This usually takes 5–15 seconds',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: AppColors.textSecondary,
@@ -182,7 +182,7 @@ class _GenerationScreenState extends State<GenerationScreen>
         ),
         const SizedBox(height: 12),
         Text(
-          '${(_progress * 100).round()} %',
+          '${(_progress * 100).round()}%',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,

@@ -67,7 +67,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
     } on GeminiException catch (e) {
       setState(() => _error = e.message);
     } catch (e) {
-      setState(() => _error = 'Fehler beim Verarbeiten: $e');
+      setState(() => _error = 'Processing failed: $e');
     } finally {
       if (mounted) setState(() => _isProcessing = false);
     }
@@ -83,7 +83,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kleidungsstück')),
+      appBar: AppBar(title: const Text('Clothing item')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -93,9 +93,10 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
               const StepHeader(
                 step: 2,
                 totalSteps: 5,
-                title: 'Kleidungsstück auswählen',
+                title: 'Choose clothing item',
                 subtitle:
-                    'Lade ein Produktfoto hoch oder einen Screenshot aus Instagram, Zalando, Amazon & Co. Die KI erkennt den Artikel und entfernt den Hintergrund.',
+                    'Upload a product photo or screenshot from Instagram, Zalando, Amazon, etc. '
+                    'We detect the item and remove the background.',
               ),
               const SizedBox(height: 24),
               if (widget.session.userPhotoBytes != null)
@@ -128,7 +129,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
-                          'KI erkennt automatisch das relevante Kleidungsstück und entfernt den Hintergrund.',
+                          'We automatically detect the relevant clothing item and remove the background.',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: AppColors.textSecondary,
                                 height: 1.4,
@@ -144,7 +145,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                 const Center(child: CircularProgressIndicator()),
                 const SizedBox(height: 12),
                 Text(
-                  'Kleidungsstück wird erkannt…',
+                  'Detecting clothing item…',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
@@ -168,7 +169,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                 const SizedBox(height: 16),
               ],
               PrimaryButton(
-                label: 'Foto hochladen',
+                label: 'Upload photo',
                 icon: Icons.upload_outlined,
                 isLoading: _isProcessing,
                 onPressed: _isProcessing
@@ -181,7 +182,7 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                     ? null
                     : () => _pickClothingImage(ImageSource.camera),
                 icon: const Icon(Icons.camera_alt_outlined),
-                label: const Text('Screenshot fotografieren'),
+                label: const Text('Take screenshot photo'),
               ),
             ],
           ),

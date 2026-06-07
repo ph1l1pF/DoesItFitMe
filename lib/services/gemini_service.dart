@@ -39,7 +39,7 @@ class GeminiService {
     final key = dotenv.env['GEMINI_API_KEY']?.trim();
     if (key == null || key.isEmpty) {
       throw GeminiException(
-        'API-Schlüssel fehlt. Bitte in der .env-Datei eintragen.',
+        'API key missing. Please add it to the .env file.',
       );
     }
     return key;
@@ -154,13 +154,13 @@ Strict requirements:
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     final candidates = json['candidates'] as List<dynamic>?;
     if (candidates == null || candidates.isEmpty) {
-      throw GeminiException('Keine Antwort von der KI erhalten.');
+      throw GeminiException('No response from the AI service.');
     }
 
     final content = candidates.first['content'] as Map<String, dynamic>?;
     final responseParts = content?['parts'] as List<dynamic>?;
     if (responseParts == null || responseParts.isEmpty) {
-      throw GeminiException('Leere KI-Antwort.');
+      throw GeminiException('Empty AI response.');
     }
 
     String? text;
@@ -186,7 +186,7 @@ Strict requirements:
 
     if (imageBytes == null) {
       throw GeminiException(
-        text ?? 'Die KI hat kein Bild generiert. Bitte erneut versuchen.',
+        text ?? 'The AI did not generate an image. Please try again.',
       );
     }
 
@@ -203,10 +203,10 @@ Strict requirements:
       final error = json['error'] as Map<String, dynamic>?;
       final message = error?['message'] as String?;
       if (message != null && message.isNotEmpty) {
-        return 'Bildgenerierung fehlgeschlagen ($statusCode): $message';
+        return 'Image generation failed ($statusCode): $message';
       }
     } catch (_) {}
-    return 'Bildgenerierung fehlgeschlagen ($statusCode).';
+    return 'Image generation failed ($statusCode).';
   }
 
   void dispose() => _client.close();

@@ -1,9 +1,10 @@
 enum ClothingCategory {
-  top('Oberteil', '👕'),
-  pants('Hose', '👖'),
-  shoes('Schuhe', '👟'),
-  jacket('Jacke', '🧥'),
-  dress('Kleid', '👗');
+  top('Top', '👕'),
+  pants('Pants', '👖'),
+  skirt('Skirt', '👚'),
+  shoes('Shoes', '👟'),
+  jacket('Jacket', '🧥'),
+  dress('Dress', '👗');
 
   const ClothingCategory(this.label, this.emoji);
 
@@ -16,6 +17,8 @@ enum ClothingCategory {
         return 'top/shirt';
       case ClothingCategory.pants:
         return 'pants/trousers';
+      case ClothingCategory.skirt:
+        return 'skirt';
       case ClothingCategory.shoes:
         return 'shoes';
       case ClothingCategory.jacket:

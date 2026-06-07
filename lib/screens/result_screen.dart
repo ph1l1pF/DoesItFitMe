@@ -32,12 +32,12 @@ class _ResultScreenState extends State<ResultScreen> {
       await Gal.putImageBytes(_after);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bild in Galerie gespeichert')),
+        const SnackBar(content: Text('Saved to photo library')),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Speichern fehlgeschlagen: $e')),
+        SnackBar(content: Text('Save failed: $e')),
       );
     }
   }
@@ -66,13 +66,13 @@ class _ResultScreenState extends State<ResultScreen> {
       await file.writeAsBytes(_after);
       await Share.shareXFiles(
         [XFile(file.path)],
-        text: 'Meine virtuelle Anprobe mit Does It Fit Me',
+        text: 'My virtual try-on with Does It Fit Me',
         sharePositionOrigin: shareOrigin,
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Teilen fehlgeschlagen: $e')),
+        SnackBar(content: Text('Share failed: $e')),
       );
     }
   }
@@ -83,12 +83,12 @@ class _ResultScreenState extends State<ResultScreen> {
       showDragHandle: true,
       builder: (context) {
         const colors = [
-          ('Schwarz', 'black'),
-          ('Weiß', 'white'),
+          ('Black', 'black'),
+          ('White', 'white'),
           ('Navy', 'navy blue'),
           ('Beige', 'beige'),
-          ('Rot', 'red'),
-          ('Grün', 'green'),
+          ('Red', 'red'),
+          ('Green', 'green'),
         ];
 
         return Padding(
@@ -98,7 +98,7 @@ class _ResultScreenState extends State<ResultScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Andere Farbe ausprobieren',
+                'Try another color',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -141,12 +141,12 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ergebnis'),
+        title: const Text('Result'),
         actions: [
           IconButton(
             onPressed: _openZoomView,
             icon: const Icon(Icons.zoom_in),
-            tooltip: 'Zoomen',
+            tooltip: 'Zoom',
           ),
         ],
       ),
@@ -160,7 +160,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ChoiceChip(
-                    label: const Text('Vorher/Nachher'),
+                    label: const Text('Before / After'),
                     selected: _showSlider,
                     onSelected: (selected) {
                       if (selected) setState(() => _showSlider = true);
@@ -168,7 +168,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   const SizedBox(width: 8),
                   ChoiceChip(
-                    label: const Text('Ergebnis'),
+                    label: const Text('Result'),
                     selected: !_showSlider,
                     onSelected: (selected) {
                       if (selected) setState(() => _showSlider = false);
@@ -217,7 +217,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _saveImage,
                           icon: const Icon(Icons.download_outlined),
-                          label: const Text('Speichern'),
+                          label: const Text('Save'),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -226,7 +226,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           builder: (shareContext) => OutlinedButton.icon(
                             onPressed: () => _shareImage(shareContext),
                             icon: const Icon(Icons.share_outlined),
-                            label: const Text('Teilen'),
+                            label: const Text('Share'),
                           ),
                         ),
                       ),
@@ -234,7 +234,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   const SizedBox(height: 12),
                   PrimaryButton(
-                    label: 'Andere Farbe ausprobieren',
+                    label: 'Try another color',
                     icon: Icons.palette_outlined,
                     onPressed: _tryOtherColor,
                   ),
@@ -248,7 +248,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         (_) => false,
                       );
                     },
-                    child: const Text('Neue Anprobe starten'),
+                    child: const Text('Start new try-on'),
                   ),
                 ],
               ),

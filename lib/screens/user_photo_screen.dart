@@ -1,7 +1,10 @@
 import 'package:does_it_fit_me/models/try_on_session.dart';
 import 'package:does_it_fit_me/screens/clothing_selection_screen.dart';
+import 'package:does_it_fit_me/screens/consent_screen.dart';
+import 'package:does_it_fit_me/services/privacy_consent_service.dart';
 import 'package:does_it_fit_me/theme/app_theme.dart';
 import 'package:does_it_fit_me/widgets/common_widgets.dart';
+import 'package:does_it_fit_me/widgets/legal_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -20,6 +23,17 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
   bool _showTips = false;
 
   Future<void> _pickImage(ImageSource source) async {
+    final consentService = await PrivacyConsentService.create();
+    if (!consentService.hasPhotoProcessingConsent) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (_) => ConsentScreen(session: widget.session),
+        ),
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
     try {
       final file = await _picker.pickImage(
@@ -55,7 +69,7 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dein Foto')),
+      appBar: AppBar(title: const Text('Your photo')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -65,11 +79,17 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
               const StepHeader(
                 step: 1,
                 totalSteps: 5,
-                title: 'Foto hochladen',
+                title: 'Upload your photo',
                 subtitle:
-                    'Wähle ein Ganzkörper- oder Oberkörperfoto von dir – so sieht die Anprobe am realistischsten aus.',
+                    'Choose a full-body or upper-body photo for the most realistic try-on.',
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
+              const PrivacyInfoBanner(
+                message:
+                    'Your photo is sent to an AI provider in the United States for '
+                    'try-on processing. It is used only for this session.',
+              ),
+              const SizedBox(height: 16),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
@@ -87,7 +107,7 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Noch kein Foto ausgewählt',
+                        'No photo selected yet',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -98,7 +118,7 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
               ),
               const SizedBox(height: 20),
               PrimaryButton(
-                label: 'Kamera öffnen',
+                label: 'Open camera',
                 icon: Icons.camera_alt_outlined,
                 isLoading: _isLoading,
                 onPressed: () => _pickImage(ImageSource.camera),
@@ -107,25 +127,25 @@ class _UserPhotoScreenState extends State<UserPhotoScreen> {
               OutlinedButton.icon(
                 onPressed: _isLoading ? null : () => _pickImage(ImageSource.gallery),
                 icon: const Icon(Icons.photo_library_outlined),
-                label: const Text('Aus Galerie wählen'),
+                label: const Text('Choose from gallery'),
               ),
               const SizedBox(height: 16),
               TextButton.icon(
                 onPressed: () => setState(() => _showTips = !_showTips),
                 icon: Icon(_showTips ? Icons.expand_less : Icons.expand_more),
                 label: Text(
-                  _showTips ? 'Tipps ausblenden' : 'Tipps für ein gutes Foto',
+                  _showTips ? 'Hide tips' : 'Tips for a great photo',
                 ),
               ),
               if (_showTips) ...[
                 const SizedBox(height: 8),
                 const TipCard(
                   tips: [
-                    'Ganzkörper oder mindestens Oberkörper sichtbar',
-                    'Gute, gleichmäßige Beleuchtung – Tageslicht ist ideal',
-                    'Gerade Haltung, Arme locker am Körper',
-                    'Einfacher Hintergrund ohne viele Ablenkungen',
-                    'Keine starken Filter oder Unschärfe',
+                    'Full body or at least upper body visible',
+                    'Good, even lighting — daylight works best',
+                    'Stand straight with arms relaxed at your sides',
+                    'Simple background without distractions',
+                    'Avoid heavy filters or blur',
                   ],
                 ),
               ],

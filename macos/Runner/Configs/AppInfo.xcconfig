@@ -8,7 +8,7 @@
 PRODUCT_NAME = does_it_fit_me
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.doesitfitme.doesItFitMe
+PRODUCT_BUNDLE_IDENTIFIER = cy.philipfrerk.doesitfitme
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.doesitfitme. All rights reserved.

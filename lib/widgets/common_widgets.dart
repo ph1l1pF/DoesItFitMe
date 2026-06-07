@@ -65,7 +65,7 @@ class StepHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Schritt $step von $totalSteps',
+          'Step $step of $totalSteps',
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w600,
@@ -122,7 +122,7 @@ class TipCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Tipps für ein gutes Foto',
+                  'Tips for a great photo',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),

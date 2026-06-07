@@ -22,7 +22,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     final clothingBytes = widget.session.effectiveClothingBytes;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Kategorie')),
+      appBar: AppBar(title: const Text('Category')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -32,9 +32,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
               const StepHeader(
                 step: 3,
                 totalSteps: 5,
-                title: 'Kategorie bestätigen',
+                title: 'Confirm category',
                 subtitle:
-                    'Wähle die passende Kategorie – so platziert die KI das Kleidungsstück korrekt.',
+                    'Pick the right category so the item is placed correctly on you.',
               ),
               const SizedBox(height: 20),
               ClipRRect(
@@ -103,7 +103,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
               const SizedBox(height: 16),
               PrimaryButton(
-                label: 'Anprobe starten',
+                label: 'Start try-on',
                 icon: Icons.auto_fix_high,
                 onPressed: _selected == null
                     ? null
