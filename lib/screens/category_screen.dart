@@ -19,7 +19,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final clothingBytes = widget.session.effectiveClothingBytes;
+    final clothingBytes = widget.session.clothingSourceBytes!;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Category')),

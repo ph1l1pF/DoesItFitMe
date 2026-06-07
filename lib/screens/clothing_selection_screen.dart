@@ -1,6 +1,5 @@
 import 'package:does_it_fit_me/models/try_on_session.dart';
 import 'package:does_it_fit_me/screens/category_screen.dart';
-import 'package:does_it_fit_me/services/gemini_service.dart';
 import 'package:does_it_fit_me/theme/app_theme.dart';
 import 'package:does_it_fit_me/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
@@ -18,59 +17,25 @@ class ClothingSelectionScreen extends StatefulWidget {
 
 class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
   final _picker = ImagePicker();
-  final _gemini = GeminiService();
-
-  bool _isProcessing = false;
-  String? _error;
-
-  @override
-  void dispose() {
-    _gemini.dispose();
-    super.dispose();
-  }
 
   Future<void> _pickClothingImage(ImageSource source) async {
-    setState(() {
-      _isProcessing = true;
-      _error = null;
-    });
+    final file = await _picker.pickImage(
+      source: source,
+      maxWidth: 2048,
+      maxHeight: 2048,
+      imageQuality: 92,
+    );
+    if (file == null || !mounted) return;
 
-    try {
-      final file = await _picker.pickImage(
-        source: source,
-        maxWidth: 2048,
-        maxHeight: 2048,
-        imageQuality: 92,
-      );
-      if (file == null || !mounted) return;
+    widget.session.clothingSourceBytes = await file.readAsBytes();
+    widget.session.clothingSourceMimeType = _mimeTypeFromPath(file.path);
 
-      final bytes = await file.readAsBytes();
-      final mimeType = _mimeTypeFromPath(file.path);
-
-      widget.session.clothingSourceBytes = bytes;
-      widget.session.clothingSourceMimeType = mimeType;
-
-      final extracted = await _gemini.extractClothingItem(
-        imageBytes: bytes,
-        mimeType: mimeType,
-      );
-
-      widget.session.processedClothingBytes = extracted.bytes;
-      widget.session.processedClothingMimeType = extracted.mimeType;
-
-      if (!mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => CategoryScreen(session: widget.session),
-        ),
-      );
-    } on GeminiException catch (e) {
-      setState(() => _error = e.message);
-    } catch (e) {
-      setState(() => _error = 'Processing failed: $e');
-    } finally {
-      if (mounted) setState(() => _isProcessing = false);
-    }
+    if (!mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => CategoryScreen(session: widget.session),
+      ),
+    );
   }
 
   String _mimeTypeFromPath(String path) {
@@ -95,21 +60,9 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                 totalSteps: 5,
                 title: 'Choose clothing item',
                 subtitle:
-                    'Upload a product photo or screenshot from Instagram, Zalando, Amazon, etc. '
-                    'We detect the item and remove the background.',
+                    'Upload a product photo or screenshot from Instagram, Zalando, Amazon, etc.',
               ),
               const SizedBox(height: 24),
-              if (widget.session.userPhotoBytes != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.memory(
-                    widget.session.userPhotoBytes!,
-                    height: 120,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              const SizedBox(height: 20),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(18),
@@ -122,14 +75,15 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(
-                          Icons.auto_awesome,
+                          Icons.checkroom_outlined,
                           color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
-                          'We automatically detect the relevant clothing item and remove the background.',
+                          'Use a clear photo of the item you want to try on. '
+                          'Product shots and shop screenshots both work.',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: AppColors.textSecondary,
                                 height: 1.4,
@@ -141,46 +95,14 @@ class _ClothingSelectionScreenState extends State<ClothingSelectionScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              if (_isProcessing) ...[
-                const Center(child: CircularProgressIndicator()),
-                const SizedBox(height: 12),
-                Text(
-                  'Detecting clothing item…',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                ),
-                const SizedBox(height: 20),
-              ],
-              if (_error != null) ...[
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: Colors.red.shade200),
-                  ),
-                  child: Text(
-                    _error!,
-                    style: TextStyle(color: Colors.red.shade700),
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
               PrimaryButton(
                 label: 'Upload photo',
                 icon: Icons.upload_outlined,
-                isLoading: _isProcessing,
-                onPressed: _isProcessing
-                    ? null
-                    : () => _pickClothingImage(ImageSource.gallery),
+                onPressed: () => _pickClothingImage(ImageSource.gallery),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: _isProcessing
-                    ? null
-                    : () => _pickClothingImage(ImageSource.camera),
+                onPressed: () => _pickClothingImage(ImageSource.camera),
                 icon: const Icon(Icons.camera_alt_outlined),
                 label: const Text('Take screenshot photo'),
               ),

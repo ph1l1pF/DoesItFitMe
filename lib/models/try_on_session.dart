@@ -10,8 +10,6 @@ class TryOnSession {
 
   Uint8List? clothingSourceBytes;
   String? clothingSourceMimeType;
-  Uint8List? processedClothingBytes;
-  String? processedClothingMimeType;
 
   ClothingCategory? category;
 
@@ -21,12 +19,6 @@ class TryOnSession {
   String? colorVariant;
 
   bool get hasUserPhoto => userPhotoBytes != null;
-  bool get hasClothing => processedClothingBytes != null || clothingSourceBytes != null;
+  bool get hasClothing => clothingSourceBytes != null;
   bool get hasResult => resultBytes != null;
-
-  Uint8List get effectiveClothingBytes =>
-      processedClothingBytes ?? clothingSourceBytes!;
-
-  String get effectiveClothingMimeType =>
-      processedClothingMimeType ?? clothingSourceMimeType ?? 'image/jpeg';
 }

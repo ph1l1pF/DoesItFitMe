@@ -45,27 +45,6 @@ class GeminiService {
     return key;
   }
 
-  Future<GeminiImageResult> extractClothingItem({
-    required Uint8List imageBytes,
-    required String mimeType,
-  }) {
-    const prompt = '''
-Analyze this image. It may be a product photo, shop screenshot, Instagram post, or Amazon listing.
-
-Identify the single most relevant clothing item in the image.
-Generate a clean, isolated product image showing ONLY that garment.
-Remove the background completely (plain white or neutral studio background).
-Preserve colors, patterns, texture, and details of the clothing accurately.
-Do not include people, text overlays, watermarks, or UI elements.
-''';
-
-    return _generateImage(
-      prompt: prompt,
-      referenceImages: [(bytes: imageBytes, mimeType: mimeType)],
-      aspectRatio: '1:1',
-    );
-  }
-
   Future<GeminiImageResult> generateTryOn({
     required Uint8List personBytes,
     required String personMimeType,
@@ -82,12 +61,13 @@ Do not include people, text overlays, watermarks, or UI elements.
 You are a professional virtual try-on AI. Create a photorealistic result.
 
 Image 1: A photo of a person (reference for identity, pose, and scene).
-Image 2: A ${category.promptName} clothing item (reference for the garment).
+Image 2: A photo of a ${category.promptName} clothing item (reference for the garment; may include background, screenshots, or UI — use only the relevant garment).
 
 Task: Generate a highly realistic photo of the SAME person from Image 1 now wearing the clothing from Image 2 as a ${category.label}.
 $colorInstruction
 
 Strict requirements:
+- Identify the correct ${category.label} in Image 2 and ignore backgrounds, text, watermarks, and unrelated items.
 - Preserve the person's face, hair, skin tone, body shape, pose, and background from Image 1.
 - The ${category.label} must look naturally worn with realistic folds, shadows, lighting, and fit.
 - Match the lighting and perspective of the original person photo.

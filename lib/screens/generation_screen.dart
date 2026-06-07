@@ -62,8 +62,8 @@ class _GenerationScreenState extends State<GenerationScreen>
       final result = await _gemini.generateTryOn(
         personBytes: widget.session.userPhotoBytes!,
         personMimeType: widget.session.userPhotoMimeType ?? 'image/jpeg',
-        clothingBytes: widget.session.effectiveClothingBytes,
-        clothingMimeType: widget.session.effectiveClothingMimeType,
+        clothingBytes: widget.session.clothingSourceBytes!,
+        clothingMimeType: widget.session.clothingSourceMimeType ?? 'image/jpeg',
         category: widget.session.category!,
         colorVariant: widget.session.colorVariant,
       );
